@@ -1,6 +1,7 @@
 {
     "name": "capmega/user-crud",
     "description": "This is a library to create, delete and update an user",
+    "keywords": ["laravel", "package", "Crud-User"],
     "type": "library",
     "require": {
         "php": ">=7.2"
@@ -18,5 +19,10 @@
             "url": "https://github.com/capmega17/userCrud.git"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Capmega\\UserCRUD\\": "src/"
+        }
+    },
     "minimum-stability": "dev"
 }
