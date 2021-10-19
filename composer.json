@@ -1,0 +1,16 @@
+{
+    "name": "capmega/user-crud",
+    "description": "This is a library to create, delete and update an user",
+    "type": "library",
+    "require": {
+        "php": ">=7.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gabriel Robles",
+            "email": "grobles@capmega.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
