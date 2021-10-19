@@ -11,5 +11,12 @@
             "name": "Gabriel Robles",
             "email": "grobles@capmega.com"
         }
-    ]
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/capmega17/userCrud.git"
+        }
+    ],
+    "minimum-stability": "dev"
 }
