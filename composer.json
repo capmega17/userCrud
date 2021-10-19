@@ -24,12 +24,5 @@
             "Capmega\\UserCRUD\\": "src/"
         }
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Capmega\\UserCrud\\UserCrudServiceProvider"
-            ]
-        }
-    }
+    "minimum-stability": "dev"
 }
