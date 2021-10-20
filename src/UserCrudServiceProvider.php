@@ -1,6 +1,6 @@
 <?php
 
-namespace Capmega\UserCRUD;
+namespace Capmega\UserCrud;
 
 use Illuminate\Support\ServiceProvider;
 
