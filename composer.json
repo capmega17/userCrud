@@ -3,9 +3,7 @@
     "description": "This is a library to create, delete and update an user",
     "keywords": ["laravel", "package", "Crud-User"],
     "type": "library",
-    "require": {
-        "php": ">=7.2"
-    },
+    "require": {},
     "license": "MIT",
     "authors": [
         {
@@ -34,6 +32,5 @@
             }
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "stable"
 }
