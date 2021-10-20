@@ -3,7 +3,10 @@
     "description": "This is a library to create, delete and update an user",
     "keywords": ["laravel", "package", "Crud-User"],
     "type": "library",
-    "require": {},
+    "require": {
+        "php": ">=7.0.0",
+        "laravel/framework": "5.6.*"
+    },
     "license": "MIT",
     "authors": [
         {
