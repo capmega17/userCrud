@@ -1,6 +1,6 @@
 <?php
 
-namespace Capmega\UserCrud;
+namespace Capmega\UserCrud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Validator;
