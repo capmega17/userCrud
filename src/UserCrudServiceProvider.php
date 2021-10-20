@@ -27,6 +27,6 @@ class UserCrudServiceProvider extends ServiceProvider
     public function register()
     {
         // register our controller
-        $this->app->make(‘Capmega\UserCrud\app\Http\Controllers\UserController’);
+        $this->app->make(‘Capmega\UserCrud\UserController’);
     }
 }
