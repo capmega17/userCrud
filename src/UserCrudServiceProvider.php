@@ -13,12 +13,13 @@ class UserCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        include __DIR__.'/routes/web.php';
-        
         $this->loadViewsFrom(
             __DIR__.'/resources/views', 'users'
         );
 
+        //Routes 
+        $this->registerRoutes();
+        
         $this->publishes([
             __DIR__.'/public/js/controllers' => public_path('js/controllers'),
             __DIR__.'/resources/views' => resource_path('views/'),
@@ -34,5 +35,14 @@ class UserCrudServiceProvider extends ServiceProvider
     public function register()
     {
         // register our controller
+    }
+
+    /**
+     * Register Routes.
+     *
+     */
+    protected function registerRoutes(): void
+    {
+        require_once __DIR__ . '/routes/web.php';
     }
 }
