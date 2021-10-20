@@ -20,7 +20,7 @@ class UserCrudServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/Controllers' => app_path('Http/Controllers'),
     ]);
     }
-
+    
     /**
      * Register services.
      *
