@@ -7,7 +7,7 @@ You can install the package via composer:
    composer require capmega/user-crud
    ```
 
-If your laravel version is <7 add this code in your composer.js file
+If your laravel version is <7 add this code in your composer.js file:
    ```sh
    "minimum-stability": "dev",
    "prefer-stable" : true
