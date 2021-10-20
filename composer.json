@@ -2,7 +2,6 @@
     "name": "capmega/user-crud",
     "description": "This is a library to create, delete and update an user",
     "keywords": ["laravel", "package", "Crud-User"],
-    "type": "library",
     "require": {},
     "license": "MIT",
     "authors": [
