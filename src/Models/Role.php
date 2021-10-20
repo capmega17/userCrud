@@ -1,6 +1,6 @@
 <?php
 
-namespace Capmega\UserCRUD;
+namespace Capmega\UserCRUD\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
