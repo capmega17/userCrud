@@ -6,6 +6,13 @@ You can install the package via composer:
    ```sh
    composer require capmega/user-crud
    ```
+
+If your laravel version is <7 add this code in your composer.js file
+   ```sh
+   "minimum-stability": "dev",
+   "prefer-stable" : true
+   ```
+
 To detect the routes file it is necessary to add the following code in config / app.php
    ```sh
    'providers' => [
