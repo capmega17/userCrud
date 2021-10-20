@@ -5,7 +5,8 @@
     "type": "library",
     "require": {
         "php": ">=7.0.0",
-        "laravel/framework": "5.6.*"
+        "laravel/framework": "5.6.*",
+        "madskullcreations/simplicity":"dev-master@dev"
     },
     "license": "MIT",
     "authors": [
