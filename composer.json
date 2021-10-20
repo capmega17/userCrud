@@ -24,5 +24,15 @@
             "Capmega\\UserCrud\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Capmega\\UserCrud\\UserCrudServiceProvider"
+            ],
+            "aliases": {
+                "Debugbar": "Capmega\\UserCrud\\Facade"
+            }
+        }
+    }
 }
