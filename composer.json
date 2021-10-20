@@ -21,7 +21,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Capmega\\UserCRUD\\": "src/"
+            "Capmega\\UserCrud\\": "src/"
         }
     },
     "minimum-stability": "dev"
