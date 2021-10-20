@@ -13,7 +13,7 @@ class UserCrudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__.'/../src/public/js/controllers/' => public_path('src/public/js/controllers'),], 'public');
+        $this->publishes([__DIR__.'/../public/js/controllers' => public_path('js'),], 'public');
     }
 
     /**
