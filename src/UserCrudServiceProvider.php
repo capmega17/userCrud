@@ -15,7 +15,7 @@ class UserCrudServiceProvider extends ServiceProvider
     {
         $this->publishes([__DIR__.'/../public/js/controllers' => public_path('js/controllers'),], 'users');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'users');
-        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/users'),], 'users');
+        $this->publishes([__DIR__.'/../resources/views' => resource_path('views/'),], 'users');
     }
 
     /**
@@ -26,5 +26,6 @@ class UserCrudServiceProvider extends ServiceProvider
     public function register()
     {
         // register our controller
+        $this->app->make(‘Capmega\UserCrud\app\Http\Controllers\UserController’);
     }
 }
