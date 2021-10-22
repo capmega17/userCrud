@@ -14,7 +14,7 @@ class UserCrudServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(
-            __DIR__.'/resources/views', 'user',
+            __DIR__.'/views', 'user',
         );
 
         $this->loadRoutesFrom(
