@@ -65,7 +65,13 @@
                                     <th>Lugar de Trabajo</th>
                                     <td>{{ $user->center->name }}</td>
                                     <th>Status</th>
-                                    <td>{{ $user->status }}</td>
+                                    <td>
+                                        @if($user->status == NULL)
+                                            <label class="label label-success">Activo</label>
+                                        @else
+                                            <label class="label label-danger">Eliminado</label>
+                                        @endif
+                                    </td>
                                 </tr>
                             </table>
                         </div>
