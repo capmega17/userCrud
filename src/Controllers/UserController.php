@@ -102,7 +102,7 @@ class UserController extends Controller
             /*
              * Returning the user.get view with the corresponding data to use.
              */
-            return view('user.get')->with([
+            return view('user::user.get')->with([
                 'users'     => $users,
                 'selects'   => $this->createSelects()
             ]);
@@ -123,7 +123,7 @@ class UserController extends Controller
          */
         $selects = $this->createSelects();
 
-        return view('user.create')->with(['selects' => $selects, 'date' => $date, 'hour' => $hour]);
+        return view('user::user.create')->with(['selects' => $selects]);
     }
 
     /**
@@ -227,7 +227,7 @@ class UserController extends Controller
             $user       = User::with('role', 'center')->find($user_id);
             $selects    = $this->createSelects();
 
-            return view('user.details')->with([ 'user'      => $user,
+            return view('user::user.details')->with([ 'user'      => $user,
                                                 'selects'   => $selects]);
         }catch(Exception $e){
             abort(500, $e->getMessage());

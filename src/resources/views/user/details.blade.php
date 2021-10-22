@@ -75,7 +75,7 @@
         </div>
     </div>
     
-    @include('user.partials.edit_details')
+    @include('user::user.partials.edit_details')
 
 </div>
 

@@ -247,8 +247,8 @@
         </div>
     </div>
         
-    @include('user.partials.edit_details')
-    @include('user.partials.delete')
+    @include('user::user.partials.edit_details')
+    @include('user::user.partials.delete')
 </div>
 @endsection
 

@@ -14,7 +14,7 @@ class UserCrudServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(
-            __DIR__.'/resources/views', 'users'
+            __DIR__.'/resources/views', 'user',
         );
 
         $this->loadRoutesFrom(
@@ -23,9 +23,9 @@ class UserCrudServiceProvider extends ServiceProvider
         
         $this->publishes([
             __DIR__.'/public/js/controllers' => public_path('js/controllers'),
-            __DIR__.'/resources/views' => resource_path('views/'),
+            /*__DIR__.'/resources/views' => resource_path('views/'),
             __DIR__.'/Controllers' => app_path('Http/Controllers'),
-            __DIR__.'/Models' => app_path('/'),
+            __DIR__.'/Models' => app_path('/'),*/
         ], 'users-crud');
     }
 
