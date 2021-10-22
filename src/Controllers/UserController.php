@@ -28,13 +28,16 @@ class UserController extends Controller
              * the select 'interested_i'
              */
             $num_records = [
-                '0100' => '25',
-                '0200' => '50',
-                '0300' => '100',
-                '0400' => 'Todos'
+                '0400' => '1000',
+                '0100' => '10',
+                '0500' => '50',
+                '1000' => '100'
             ];
 
-            $users      = User::with('role', 'center');
+            $user  = User::find(Auth::user()->id);
+
+            $users      = User::with('role', 'center')
+                                ->where('id','!=',$user->id);
             $selects    = $this->createSelects();
 
             if($request->get('search')){
@@ -49,7 +52,7 @@ class UserController extends Controller
              */
             if($request->get('status') && $user_status[$request->get('status')] !== 'Todos'){
                 if($request->get('status') === '0200'){
-                    $users = $users->where('status', '=','active');
+                    $users = $users->where('status', '=',NULL);
 
                 }else if($request->get('status') === '0300'){
                     $users = $users->where('status', '=','delete');
@@ -87,9 +90,37 @@ class UserController extends Controller
                 $show = $num_records[$request->get('show')];
             }
 
-            if($show && $show === 'Todos'){
-                $users = $users->get();
+            if($show && $show === '0400'){
+                $users = $users->paginate($show ? $show : 10)->appends([
+                    'search'     => $request->get('search'),
+                    'status'     => $request->get('status'),
+                    'show'       => $request->get('show'),
+                    'order'      => $request->get('order'),
+                ]);
+            }
 
+            if($show && $show === '0100'){
+                $users = $users->paginate($show ? $show : 10)->appends([
+                    'search'     => $request->get('search'),
+                    'status'     => $request->get('status'),
+                    'show'       => $request->get('show'),
+                    'order'      => $request->get('order'),
+                ]);
+            }
+            if($show && $show === '0500'){
+                $users = $users->paginate($show ? $show : 50)->appends([
+                    'search'     => $request->get('search'),
+                    'status'     => $request->get('status'),
+                    'show'       => $request->get('show'),
+                    'order'      => $request->get('order'),
+                ]);
+            }if($show && $show === '0100'){
+                $users = $users->paginate($show ? $show : 1000)->appends([
+                    'search'     => $request->get('search'),
+                    'status'     => $request->get('status'),
+                    'show'       => $request->get('show'),
+                    'order'      => $request->get('order'),
+                ]);
             }else{
                 $users = $users->paginate($show ? $show : 100)->appends([
                     'search'     => $request->get('search'),
@@ -121,9 +152,12 @@ class UserController extends Controller
          * Get selects for this page
          * Get date and time for the inputs
          */
+        
+        $user  = User::find(Auth::user()->id); 
         $selects = $this->createSelects();
 
-        return view('user::user.create')->with(['selects' => $selects]);
+        return view('user::user.create')->with(['selects' => $selects,
+                                                'user' => $user]);
     }
 
     /**
@@ -136,9 +170,8 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'name'              => 'required',
                 'last_name'         => 'required',
-                'center'            => 'required',
                 'role'              => 'required',
-                'email'             => 'required|email',
+                'email'             => 'unique:users|required|email',
                 'password'          => 'required',
                 'password_confirm'  => 'required|same:password',
             ]);
@@ -149,16 +182,27 @@ class UserController extends Controller
                     ->withInput();
             }
 
+            $user  = User::find(Auth::user()->id);
+            /*
+             * Valida si el input centers esta lleno 
+             * si, no es asignado el id center del
+             * usuario que esta registrando al nuevo usuario
+            */
+            if($request->center == null){
+                $center_id  = $user->center_id;
+            }else{
+                $center_id  =$request->center;
+            }
+            
             /*
              * Create user
              */
             $user           = new User;
-            $center         = Center::find($request->center);
+            $center         = Center::find($center_id);
             $role           = Role::find($request->role);
             $user->name     = $request->name.' '.$request->last_name;
             $user->seoname  = to_seo($user->name);
             $user->email    = $request->email;
-            $user->status   = 'Active';
             $user->password = bcrypt($request->password);
             $user->avatar   = 'default.png';
             $user->center()->associate($center);
@@ -202,6 +246,40 @@ class UserController extends Controller
 
             return redirect('/user')
                        ->with('alert', array('msg'   => 'Se ha eliminado "'. $user->name .'"',
+                                             'tipo'  => 'warning',
+                                             'quick' => 'Éxito'));
+
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
+        }
+    }
+
+    /*
+     * Active an User - This is SOFT active
+     */
+    public function active($user_id, Request $request)
+    {
+        try{
+            /*
+             * Search for client
+             */
+            $user = User::find($user_id);
+
+            /*
+             * Save data
+             */
+            $user->status   = NULL;
+            $user->save();
+
+            if($request->return_url == 'details'){
+                return redirect('/user/'.$user->id.'/details')
+                       ->with('alert', array('msg'   => 'Se ha activado "'. $user->name .'", por favor cambie la contraseña del usuario',
+                                             'tipo'  => 'warning',
+                                             'quick' => 'Éxito'));
+            }
+
+            return redirect('/user/'.$user->id.'/details')
+                       ->with('alert', array('msg'   => 'Se ha activado "'. $user->name .'", por favor cambie la contraseña del usuario',
                                              'tipo'  => 'warning',
                                              'quick' => 'Éxito'));
 
@@ -259,10 +337,10 @@ class UserController extends Controller
              * the select 'interested_in'
              */
             $num_records = [
-                '0100' => '25',
-                '0200' => '50',
-                '0300' => '100',
-                '0400' => 'Todos'
+                '0400' => 'Todos',
+                '0100' => '10',
+                '0500' => '50',
+                '1000' => '100'
             ];
 
             /*
@@ -338,7 +416,6 @@ class UserController extends Controller
             $role           = Role::find($request->role);
             $user->name     = $request->name;
             $user->seoname  = to_seo($user->name);
-            $user->status   = 'active';
             if($request->password != null){
                 $user->password = bcrypt($request->password);
             }

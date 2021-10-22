@@ -36,35 +36,6 @@ app.controller('UserDetailController', function($scope, $uibModal){
 
         });
     };
-
-    /*
-     * Delete a client
-     */
-    $scope.deleteClient = function(){
-        var client = $scope.client;
-
-        var modalInstance = $uibModal.open({
-            ariaLabelledBy: 'modal-title-bottom',
-            ariaDescribedBy: 'modal-body-bottom',
-            templateUrl: 'delete.html',
-            controller: 'deleteController',
-            size: 'md',
-            resolve: {
-                client: function(){
-                  return client;
-                },
-                return_url: function(){
-                    return 'list';
-                }
-            }
-        });
-
-        modalInstance.result.then(function(result){
-
-        }, function () {
-
-        });
-    };
 });
 
 
@@ -128,6 +99,30 @@ app.controller('UserListController', function($scope, $uibModal){
 
         });
     };
+
+    $scope.activeUser = function(user){
+        var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title-bottom',
+            ariaDescribedBy: 'modal-body-bottom',
+            templateUrl: 'active.html',
+            controller: 'activeController',
+            size: 'md',
+            resolve: {
+                user: function(){
+                  return user;
+                },
+                return_url: function(){
+                    return 'list';
+                }
+            }
+        });
+
+        modalInstance.result.then(function(result){
+
+        }, function () {
+
+        });
+    };
 });
 
 app.controller('editDetailsController', function ($uibModalInstance, $scope, user, centers, roles, return_url){
@@ -154,6 +149,21 @@ app.controller('deleteController', function ($uibModalInstance, $scope, user, re
 
     $scope.ok = function(){
         document.getElementById("deleteForm").submit();
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function(){
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('activeController', function ($uibModalInstance, $scope, user, return_url){
+    $scope.user         = user;
+    $scope.action_url   = '/user/'+ user.id + '/active';
+    $scope.return_url   = return_url;
+
+    $scope.ok = function(){
+        document.getElementById("activeForm").submit();
         $uibModalInstance.close();
     };
 

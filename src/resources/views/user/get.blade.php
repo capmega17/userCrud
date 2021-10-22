@@ -87,11 +87,11 @@
                                             @endif
                                         @endif
                                     @else
-                                        @if($keyNum === '0100')
-                                            <option value="{{$keyNum}}" selected>{{$num_record.' Registros'}}</option>
+                                        @if($keyNum === '0400')
+                                            <option value="{{$keyNum}}" selected>{{$num_record}}</option>
                                         @else
-                                            @if($keyNum === '0400')
-                                                <option value="{{$keyNum}}">{{$num_record}}</option>
+                                            @if($keyNum === '0100')
+                                                <option value="{{$keyNum}}">{{$num_record.' Registros'}}</option>
                                             @else
                                                 <option value="{{$keyNum}}">{{$num_record.' Registros'}}</option>
                                             @endif
@@ -224,7 +224,11 @@
                             {{ $user->center->name }}
                         </td>
                         <td>
-                            {{ $user->status }}
+                            @if($user->status == NULL)
+                                <label class="label label-success">Activo</label>
+                            @else
+                                <label class="label label-danger">Eliminado</label>
+                            @endif
                         </td>
                         <td>
                             {{ $user->role->name }}
@@ -234,7 +238,12 @@
                         </td>
                         @if(Auth::user()->role->id <= 3)
                             <td>
-                                <a href="#" ng-click="deleteUser({{ json_encode($user) }})"><i class="fa fa-times"></i></a>
+                                @if($user->status == NULL)
+                                    <a href="#" ng-click="deleteUser({{ json_encode($user) }})"><i class="fa fa-times"></i></a>
+                                @else
+                                    <a href="#" ng-click="activeUser({{ json_encode($user) }})"><i class="fa fa-check"></i></a>
+                                @endif
+
                             </td>
                         @endif
                     </tr>
@@ -249,6 +258,7 @@
         
     @include('user::user.partials.edit_details')
     @include('user::user.partials.delete')
+    @include('user::user.partials.active')
 </div>
 @endsection
 

@@ -15,11 +15,7 @@
 
 @section('content')
 
-@if(isset($user))
-    <form action="/user/{{ $user->id }}/update" method="POST" novalidate="novalidate" class="form-horizontal bv-form">
-@else
-    <form action="/user/store" method="POST" novalidate="novalidate" class="form-horizontal bv-form">
-@endif
+<form action="/user/store" method="POST" novalidate="novalidate" class="form-horizontal bv-form">
     {{ csrf_field() }}
 
     @if($errors->any())
@@ -77,7 +73,7 @@
 
                     <div class="form-group col-xs-12 col-sm-12 col-md-12 mb3">
                         <div class="col-xs-12 col-sm-12 col-md-2"></div>
-                        <div class="col-xs-12 col-sm-12 col-md-6"><img src="/img/icons/n2.png" alt="" class="mt2n">&nbsp;&nbsp;<strong>Asigne el centro de trabajo:</strong></div>
+                        <div class="col-xs-12 col-sm-12 col-md-6"><img src="/img/icons/n2.png" alt="" class="mt2n">&nbsp;&nbsp;<strong>*Asigne el centro de trabajo (Opcional):</strong></div>
                     </div>
 
                     <div class="form-group has-feedback">
@@ -85,7 +81,7 @@
                             <label class="col-xs-12 col-sm-12 col-md-2 control-label">Empresa:</label>
                             <div class="col-xs-12 col-sm-12 col-md-6 selectContainer">
                                 <select name="center" id="center" class="form-control">
-                                    <option value="0">Selecciona una opción</option>
+                                    <option value="">Selecciona una opción</option>
 
                                     @foreach($selects['centers'] as $center)
                                         @if(isset($user))
@@ -115,11 +111,7 @@
                                     <option value="0">Selecciona una opción</option>
 
                                     @foreach($selects['roles'] as $role)
-                                        @if(isset($user))
-                                            <option value="{{ $optionKey }}" {{ $optionKey == $user->userData->canalized_to ? 'selected' : '' }}> {{ $optionText }}</option>
-                                        @else
-                                            <option value="{{ $role->id }}"> {{ $role->name }}</option>
-                                        @endif
+                                        <option value="{{ $role->id }}"> {{ $role->name }}</option>
                                     @endforeach
                                 </select>
 
