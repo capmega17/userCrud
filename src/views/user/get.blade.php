@@ -198,6 +198,7 @@
                         <th>Status</th>
                         <th>Role</th>
                         <th>Actualizar</th>
+                        <th>Actualizar Contraseña</th>
                         @if(Auth::user()->role->id <= 3)
                             <th>Eliminar</th>
                         @endif
@@ -236,6 +237,9 @@
                         <td>
                             <a href="#" ng-click="editDetails({{ json_encode($user) }}, {{ json_encode($selects['centers']) }}, {{ json_encode($selects['roles']) }})"><i class="fa fa-pencil-square-o"></i></a>
                         </td>
+                        <td>
+                            <a href="#" ng-click="updatePassword({{ json_encode($user) }})"><i class="fa fa-pencil-square-o"></i></a>
+                        </td>
                         @if(Auth::user()->role->id <= 3)
                             <td>
                                 @if($user->status == NULL)
@@ -257,6 +261,7 @@
     </div>
         
     @include('user::user.partials.edit_details')
+    @include('user::user.partials.edit_password')
     @include('user::user.partials.delete')
     @include('user::user.partials.active')
 </div>

@@ -43,6 +43,10 @@
                                 <i class="fa fa-pencil"></i>
                                 Editar
                             </button>
+                            <button class="btn btn-info" ng-click="updatePassword()">
+                                <i class="fa fa-pencil"></i>
+                                Cambiar contraseña
+                            </button>
                         </div>
                     </div>
                     <br>
@@ -82,6 +86,7 @@
     </div>
     
     @include('user::user.partials.edit_details')
+    @include('user::user.partials.edit_password')
 
 </div>
 
