@@ -132,33 +132,77 @@
                 </div>
             </div>
 
-            {{-- <div class="col-sm-12 col-md-3">
+            <div class="col-sm-12 col-md-3">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="order" class="col-sm-2 control-label">Tipo Rol</label>
+                        <label for="order" class="col-sm-2 control-label">Tipo de Rol</label>
                         <div class="col-sm-10">
-                            <select type="text" class="form-control" name="role" id="role">
-                                <option value="1000" selected>Todos</option>
-                                @foreach($selects['roles'] as $keyRol => $rol)
+                            <select type="text" class="form-control" name="rol" id="rol">
+                                
+                                @if(!request('rol'))
+                                    <option value="0100" selected>Todos</option>
+                                @endif
+                                @if(request('rol') == '0100' && request('rol'))
+                                    <option value="0100" selected>Todos</option>
+                                @endif
+                                @foreach($selects['roles'] as $rol)
                                     @if(request('rol'))
-                                        @if($keyRol === request('rol'))
-                                            <option value="{{$keyRol}}" selected>{{$rol->name}}</option>
+                                        @if($rol->id == request('rol'))
+                                            <option value="{{$rol->id}}" selected>{{$rol->name}}</option>
                                         @else
-                                            <option value="{{$keyRol}}">{{$rol->name}}</option>
+                                            <option value="{{$rol->id}}">{{$rol->name}}</option>
                                         @endif
                                     @else
-                                        @if($keyRol === '1000')
-                                            <option value="1000" selected>Todos</option>
-                                        @else
-                                            <option value="{{$keyRol}}">{{$rol->name}}</option>
-                                        @endif
+                                        <option value="{{$rol->id}}">{{$rol->name}}</option>
                                     @endif
                                 @endforeach
+
+                                @if(request('rol') && request('rol') != '0100')
+                                    <option value="0100">Todos</option>
+                                @endif
+
                             </select>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
+
+            @if(count($selects['centers']) > 1)
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="order" class="col-sm-2 control-label">Centro</label>
+                            <div class="col-sm-10">
+                                <select type="text" class="form-control" name="center" id="center">
+                                    
+                                    @if(!request('center'))
+                                        <option value="0100" selected>Todos</option>
+                                    @endif
+                                    @if(request('center') == '0100' && request('rol'))
+                                        <option value="0100" selected>Todos</option>
+                                    @endif
+                                    @foreach($selects['centers'] as $center)
+                                        @if(request('center'))
+                                            @if($center->id == request('center'))
+                                                <option value="{{$center->id}}" selected>{{$center->name}}</option>
+                                            @else
+                                                <option value="{{$center->id}}">{{$center->name}}</option>
+                                            @endif
+                                        @else
+                                            <option value="{{$center->id}}">{{$center->name}}</option>
+                                        @endif
+                                    @endforeach
+
+                                    @if(request('center') && request('center') != '0100')
+                                        <option value="0100">Todos</option>
+                                    @endif
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="row" id="btnRow">
@@ -285,6 +329,14 @@
             });
 
             $("#type").on("change", function(){
+                $("#filterContainer").submit();
+            });
+
+            $("#rol").on("change", function(){
+                $("#filterContainer").submit();
+            });
+
+            $("#center").on("change", function(){
                 $("#filterContainer").submit();
             });
 

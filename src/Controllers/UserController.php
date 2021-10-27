@@ -35,7 +35,6 @@ class UserController extends Controller
             ];
 
             $user  = User::find(Auth::user()->id);
-
             $users      = User::with('role', 'center')
                                 ->where('id','!=',$user->id);
             $selects    = $this->createSelects();
@@ -44,7 +43,6 @@ class UserController extends Controller
                 $users = $users->where('name', 'like', '%'.$request->get('search').'%')
                     ->orWhere('email', 'like', '%'.$request->get('search').'%');
             }
-
 
             /*
              * If the status filter exists (has data) must query the User.
@@ -84,6 +82,29 @@ class UserController extends Controller
                 $users = $users->orderBy('id', 'ASC');
             }
 
+            /*
+             * If the status filter exists (has data) must query the User.
+             * The status filter is about the user status.
+             */
+            if($request->get('rol')){
+                if($request->get('rol') != '0100'){
+                    $rol = intval($request->get('rol'));
+                    $users = $users->where('role_id', '=',$rol);
+                }
+            }
+
+            /*
+             * If the status filter exists (has data) must query the User.
+             * The status filter is about the user status.
+             */
+            if($request->get('center')){
+                if($request->get('center') != '0100'){
+                    $center = intval($request->get('center'));
+                    $users = $users->where('center_id', '=',$center);
+                }
+            }
+
+
             $show = null;
 
             if($request->get('show')){
@@ -96,6 +117,7 @@ class UserController extends Controller
                     'status'     => $request->get('status'),
                     'show'       => $request->get('show'),
                     'order'      => $request->get('order'),
+                    'rol'        => $request->get('rol'),
                 ]);
             }
 
@@ -105,6 +127,7 @@ class UserController extends Controller
                     'status'     => $request->get('status'),
                     'show'       => $request->get('show'),
                     'order'      => $request->get('order'),
+                    'rol'        => $request->get('rol'),
                 ]);
             }
             if($show && $show === '0500'){
@@ -113,6 +136,7 @@ class UserController extends Controller
                     'status'     => $request->get('status'),
                     'show'       => $request->get('show'),
                     'order'      => $request->get('order'),
+                    'rol'        => $request->get('rol'),
                 ]);
             }if($show && $show === '0100'){
                 $users = $users->paginate($show ? $show : 1000)->appends([
@@ -120,6 +144,7 @@ class UserController extends Controller
                     'status'     => $request->get('status'),
                     'show'       => $request->get('show'),
                     'order'      => $request->get('order'),
+                    'rol'        => $request->get('rol'),
                 ]);
             }else{
                 $users = $users->paginate($show ? $show : 100)->appends([
@@ -127,6 +152,7 @@ class UserController extends Controller
                     'status'     => $request->get('status'),
                     'show'       => $request->get('show'),
                     'order'      => $request->get('order'),
+                    'rol'        => $request->get('rol'),
                 ]);
             }
 
