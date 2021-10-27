@@ -36,6 +36,32 @@ app.controller('UserDetailController', function($scope, $uibModal){
 
         });
     };
+
+    $scope.updatePassword = function(){
+        var user    = $scope.user;
+
+        var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title-bottom',
+            ariaDescribedBy: 'modal-body-bottom',
+            templateUrl: 'updatePassword.html',
+            controller: 'updatePasswordController',
+            size: 'md',
+            resolve: {
+                user: function(){
+                  return user;
+                },
+                return_url: function(){
+                    return 'details';
+                }
+            }
+        });
+
+        modalInstance.result.then(function(result){
+
+        }, function () {
+
+        });
+    };
 });
 
 
@@ -59,6 +85,30 @@ app.controller('UserListController', function($scope, $uibModal){
                 },
                 roles: function(){
                   return roles;
+                },
+                return_url: function(){
+                    return 'list';
+                }
+            }
+        });
+
+        modalInstance.result.then(function(result){
+
+        }, function () {
+
+        });
+    };
+
+    $scope.updatePassword = function(user){
+        var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title-bottom',
+            ariaDescribedBy: 'modal-body-bottom',
+            templateUrl: 'updatePassword.html',
+            controller: 'updatePasswordController',
+            size: 'md',
+            resolve: {
+                user: function(){
+                  return user;
                 },
                 return_url: function(){
                     return 'list';
@@ -134,6 +184,21 @@ app.controller('editDetailsController', function ($uibModalInstance, $scope, use
 
     $scope.ok = function(){
         document.getElementById("detailForm").submit();
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function(){
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('updatePasswordController', function ($uibModalInstance, $scope, user, return_url){
+    $scope.user     = user;
+    $scope.action_url   = '/user/'+ user.id + '/updatePassword';
+    $scope.return_url   = return_url;
+
+    $scope.ok = function(){
+        document.getElementById("updatePasswordForm").submit();
         $uibModalInstance.close();
     };
 

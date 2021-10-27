@@ -32,18 +32,6 @@
                     <option value="" hidden>Selecciona un Tipo</option>
                 </select>
             </div>
-
-            <div class="form-group">
-                <label for="">Nueva Contraseña</label>
-                 <input type="password" class="form-control" name="password">
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="">Repetir Contraseña</label>
-                 <input type="password" class="form-control" name="password_confirm">
-                </select>
-            </div>
         </form>
     </div>
     <div class="modal-footer">

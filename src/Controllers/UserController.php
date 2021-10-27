@@ -313,6 +313,174 @@ class UserController extends Controller
     }
 
 
+    /*
+     * Update and Save DetailData from an User
+     */
+    public function saveDetails($user_id, Request $request)
+    {
+        try{
+
+            $validator = Validator::make($request->all(), [
+                'name'              => 'required',
+                'center'            => 'required',
+                'role'              => 'required',
+                'email'             => 'required|email',
+            ]);
+
+            if($validator->fails()){
+                return redirect('/user/'.$user_id.'/details')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            /*
+             * Search for user
+             */
+            $user       = User::find($user_id);
+
+            /*
+             * Save data
+             */
+            $center         = Center::find($request->center);
+            $role           = Role::find($request->role);
+            $user->name     = $request->name;
+            $user->seoname  = to_seo($user->name);
+            $user->email    = $request->email;
+            $user->avatar   = 'default.png';
+            $user->center()->associate($center);
+            $user->role()->associate($role);
+            $user->save();
+
+
+            if($request->return_url == 'details'){
+                return redirect('/user/'.$user->id.'/details')
+                       ->with('alert', array('msg'   => 'Los datos de "'. $user->name .'" se han actualizado',
+                                             'tipo'  => 'success',
+                                             'quick' => 'Éxito'));
+            }
+
+            return redirect('/user')
+                       ->with('alert', array('msg'   => 'Los datos de "'. $user->name .'" se han actualizado',
+                                             'tipo'  => 'success',
+                                             'quick' => 'Éxito'));
+
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
+        }
+    }
+
+    /*
+     * Update and Update Password from an User
+     */
+    public function updatePassword($user_id, Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+                'password'          => 'required',
+                'password_confirm'  => 'required|same:password',
+            ]);
+
+            if($validator->fails()){
+                if($request->return_url == 'details'){
+                    return redirect('/user/'.$user_id.'/details')
+                        ->withErrors($validator)
+                        ->withInput();
+                    }else{
+                        return redirect('/user/')
+                            ->withErrors($validator)
+                            ->withInput();
+                    }
+            }
+
+            /*
+             * Search for user
+             */
+            $user       = User::find($user_id);
+
+            /*
+             * Save data
+             */
+            
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            if($request->return_url == 'details'){
+                return redirect('/user/'.$user->id.'/details')
+                       ->with('alert', array('msg'   => 'La contraseña del usuario "'. $user->name .'" se ha actualizado',
+                                             'tipo'  => 'success',
+                                             'quick' => 'Éxito'));
+            }
+
+            return redirect('/user')
+                       ->with('alert', array('msg'   => 'La contraseña del usuario "'. $user->name .'" se ha actualizado',
+                                             'tipo'  => 'success',
+                                             'quick' => 'Éxito'));
+
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
+        }
+    }
+
+
+    public function exportToCSV()
+    {
+        try{
+
+            $users = User::with('role', 'center')->get();
+
+            /*
+             * Creating the file where to write the CSV
+             */
+            $filename = public_path("usuarios.csv");
+
+            /*
+             * Open the file with write permissions.
+             */
+            $handle = fopen($filename, 'w+');
+
+            /*
+             * Inserting CSV Headers
+             */
+            fputcsv($handle, array_map("utf8_decode", array(
+                'Folio',
+                'Nombre Completo',
+                'Email',
+                'Centro de Trabajo',
+                'Rol'
+            )));
+
+            foreach($users as $user){
+                $arr = array(
+                    ($user['id']) ? $user['id'] : 'NA',
+                    ($user['name']) ? $user['name'] : 'NA',
+                    ($user['email']) ? $user['email'] : 'NA',
+                    ($user['center']['name']) ? $user['center']['name'] : 'NA',
+                    ($user['role']['name']) ? $user['role']['name'] : 'NA',
+                );
+                $arr = array_map("utf8_decode", $arr);
+                fputcsv($handle, $arr);
+            }
+
+            /*
+             * Closing the file.
+             */
+            fclose($handle);
+
+            /*
+             * Settings headers for the response.
+             */
+            $headers = array('Content-Type' => 'text/csv');
+
+            /*
+             * Returning the file (download), after the file was downloaded, delete it.
+             */
+            return response()->download($filename, 'usuarios.csv', $headers)->deleteFileAfterSend(true);
+
+        }catch(Exception $e){
+            abort(500, $e->getMessage());
+        }
+    }
+
     /**
      * Function for creating the selects
      * order
@@ -380,126 +548,5 @@ class UserController extends Controller
             abort(500, $e->getMessage());
         }
 
-    }
-
-
-    /*
-     * Update and Save DetailData from an User
-     */
-    public function saveDetails($user_id, Request $request)
-    {
-        try{
-
-            $validator = Validator::make($request->all(), [
-                'name'              => 'required',
-                'center'            => 'required',
-                'role'              => 'required',
-                'email'             => 'required|email',
-                'password_confirm'  => 'same:password',
-            ]);
-
-            if($validator->fails()){
-                return redirect('/user/'.$user_id.'/details')
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-
-            /*
-             * Search for user
-             */
-            $user       = User::find($user_id);
-
-            /*
-             * Save data
-             */
-            $center         = Center::find($request->center);
-            $role           = Role::find($request->role);
-            $user->name     = $request->name;
-            $user->seoname  = to_seo($user->name);
-            if($request->password != null){
-                $user->password = bcrypt($request->password);
-            }
-            $user->email    = $request->email;
-            $user->avatar   = 'default.png';
-            $user->center()->associate($center);
-            $user->role()->associate($role);
-            $user->save();
-
-
-            if($request->return_url == 'details'){
-                return redirect('/user/'.$user->id.'/details')
-                       ->with('alert', array('msg'   => 'Los datos de "'. $user->name .'" se han actualizado',
-                                             'tipo'  => 'success',
-                                             'quick' => 'Éxito'));
-            }
-
-            return redirect('/user')
-                       ->with('alert', array('msg'   => 'Los datos de "'. $user->name .'" se han actualizado',
-                                             'tipo'  => 'success',
-                                             'quick' => 'Éxito'));
-
-        }catch(Exception $e){
-            abort(500, $e->getMessage());
-        }
-    }
-
-
-    public function exportToCSV()
-    {
-        try{
-
-            $users = User::with('role', 'center')->get();
-
-            /*
-             * Creating the file where to write the CSV
-             */
-            $filename = public_path("usuarios.csv");
-
-            /*
-             * Open the file with write permissions.
-             */
-            $handle = fopen($filename, 'w+');
-
-            /*
-             * Inserting CSV Headers
-             */
-            fputcsv($handle, array_map("utf8_decode", array(
-                'Folio',
-                'Nombre Completo',
-                'Email',
-                'Centro de Trabajo',
-                'Rol'
-            )));
-
-            foreach($users as $user){
-                $arr = array(
-                    ($user['id']) ? $user['id'] : 'NA',
-                    ($user['name']) ? $user['name'] : 'NA',
-                    ($user['email']) ? $user['email'] : 'NA',
-                    ($user['center']['name']) ? $user['center']['name'] : 'NA',
-                    ($user['role']['name']) ? $user['role']['name'] : 'NA',
-                );
-                $arr = array_map("utf8_decode", $arr);
-                fputcsv($handle, $arr);
-            }
-
-            /*
-             * Closing the file.
-             */
-            fclose($handle);
-
-            /*
-             * Settings headers for the response.
-             */
-            $headers = array('Content-Type' => 'text/csv');
-
-            /*
-             * Returning the file (download), after the file was downloaded, delete it.
-             */
-            return response()->download($filename, 'usuarios.csv', $headers)->deleteFileAfterSend(true);
-
-        }catch(Exception $e){
-            abort(500, $e->getMessage());
-        }
     }
 }
